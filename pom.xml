@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--有**的标签可能需要修改-->
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thirdpart</groupId>
+    <!-- **编解码插件名 填写productKey** -->
+    <artifactId>YsMe7xF0</artifactId>
+    <!--版本号无需修改-->
+    <version>1.0</version>
+
+    <packaging>bundle</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <basedir>./</basedir>
+        <!-- **填写productKey** -->
+        <productKey>YsMe7xF0</productKey>
+    </properties>
+
+    <dependencies>
+        <!-- 单元测试使用 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- OSGI -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--JSON-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--UTIL-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--h3c-->
+        <dependency>
+            <groupId>com.h3c</groupId>
+            <artifactId>com.h3c.iot.codec</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/com.h3c.iot.codec-1.0.jar</systemPath>
+        </dependency>
+
+        <!-- **以上的包都不可修改；如需其他包，可以在下面引入，scope无需设置，并必须在<Embed-Dependency>中加入该包的artifactId。
+            请尽量不要引用不支持组件化的jar包，有可能会导致功能不可用，例如fastjson。
+            如何快速辨别是否支持，请查看jar包中的MANIFEST.MF文件，如果有Bundle-xxx相关项和Export-Package、Import-Package项，则是支持组件化的。
+            如果引入了不支持组件化的包，IDE也会给出警告** -->
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 编码需要使用JDK1.8版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.5.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${productKey}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Export-Package>
+                            com.thirdpart.${productKey}.codec;version="${project.version}"
+                        </Export-Package>
+                        <Import-Package>
+                            org.osgi.framework,
+                            com.h3c.iot.codec,
+                            com.google.gson,
+                            org.apache.commons.lang3
+                        </Import-Package>
+                        <Bundle-Activator>
+                            com.thirdpart.${productKey}.Activator
+                        </Bundle-Activator>
+                        <!-- **自定义包请在这里填写artifactId，多个包以英文逗号隔开，末尾不需要逗号** -->
+                        <Embed-Dependency>
+
+                        </Embed-Dependency>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
